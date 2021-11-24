@@ -6,12 +6,13 @@
 {% block 'content' %}
     <header>
         <section>
+            {% csrf_token %}
             <input id="todo-input" type="text" placeholder="Enter a task">
             <button id="add-item">Add/Edit task</button>
             {% if object_list %}
                 <ul id="todo-list">
                     {% for task in object_list %}
-                        <img onclick="deleteTask(event);" src={% static 'Delete-Button.png' %} width="45"></img>
+                        <img onclick="deleteTask(event);" src={% static 'delete-btn.png' %} height="45"></img>
                         <li id="task{{task.id}}" onclick="chooseTask(event)">
                             <p>{{task.task}}</p>
                         </li>
