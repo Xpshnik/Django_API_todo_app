@@ -1,0 +1,64 @@
+body {
+    margin: auto;
+    font-family: 'Raleway', sans-serif;
+}
+
+header > section {
+    width: 100%;
+    min-height: 100vh;
+    box-sizing: border-box;
+    overflow: hidden;
+    position: relative;
+    background-color: lightblue;
+    text-align: center;
+    padding-top: 10px;
+}
+
+#todo-input {
+    font-family: 'Raleway', sans-serif;
+    font-size: 24px;
+    padding: 12px 24px;
+    margin: 10px 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+button {
+    font-size: 20px;
+    margin-top: 20px;
+    margin-right: 10px;
+    padding: 10px 20px;
+}
+
+ul {
+    list-style: none;
+}
+
+li {
+    display: grid;
+    justify-content: start;
+    font-size: 24px;
+    padding: 10px 24px;
+    margin: 8px 0px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: wheat;
+}
+
+li:hover {
+    outline: 2px ridge rgb(209, 142, 142);
+  }
+
+li.selected {
+    outline: 2px ridge rgb(209, 142, 142);
+}
+
+img {
+    float: right;
+    padding-bottom: 0px;
+}
+
+p {
+    margin-bottom: 0px;
+}
