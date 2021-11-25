@@ -9,7 +9,7 @@ header > section {
     box-sizing: border-box;
     overflow: hidden;
     position: relative;
-    background-color: #F0F0F0;
+    background-color: rgb(0, 0, 255, 0.03); /* #F0F0F0 */
     text-align: center;
     padding-top: 10px;
 }
@@ -44,14 +44,14 @@ li {
     justify-content: start;
     font-size: 24px;
     padding: 10px 24px;
-    margin: 8px 0px;
+    margin: 1rem auto 1rem 1.5rem;
     border-radius: 8px;
     border: 1px solid #ccc;
     background-color: rgba(245, 222, 179, 0.363);
 }
 
 li:hover {
-    outline: 2px ridge rgb(209, 142, 142);
+    outline: 2px ridge rgba(245, 222, 179, 1); /* rgb(209, 142, 142) */
     background-color: rgba(245, 222, 179, 0.563);
   }
 

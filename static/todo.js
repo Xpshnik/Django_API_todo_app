@@ -22,7 +22,7 @@ const chooseTask = (event) => {
     }
 }
 
-const addOrModifyTask = () => {
+const addOrModifyTask = async () => {
     if (input.value !== '') {
         if (typeof id !== 'undefined') {
             const listEl = document.getElementById(id);
@@ -31,11 +31,15 @@ const addOrModifyTask = () => {
                 "task": input.value
             };
             updateTask(task)
-            listEl.firstChild.innerText = input.value;
+            listEl.getElementsByTagName('p')[0].innerText = input.value;
             listEl.classList.remove('selected');
         } else {
-            const id = 'task' + Math.round((list.childElementCount + 1) / 2);
-            const textNode = document.createTextNode(input.value);
+            let task = {
+                "task": input.value
+            };
+            task = await createTask(task)
+            const id = 'task' + task.id;
+            const textNode = document.createTextNode(task.task);
             const pTag = document.createElement('p');
             pTag.appendChild(textNode);
             const listEl = document.createElement('li');
@@ -44,15 +48,10 @@ const addOrModifyTask = () => {
             listEl.appendChild(pTag);
             const deletePicture = document.createElement('img');
             deletePicture.src = '/static/delete-btn.png';
-            deletePicture.width = '45';
+            deletePicture.height = '45';
             deletePicture.addEventListener('click', deleteTask);
             list.appendChild(deletePicture);
             list.appendChild(listEl);
-            const task = {
-                "id": id.substring(4),
-                "task": pTag.innerText
-            };
-            createTask(task)
         }
         input.value = '';
         id = undefined;
@@ -61,27 +60,67 @@ const addOrModifyTask = () => {
 
 const deleteTask = (event) => {
     if (confirm(`The task '${event.target.nextElementSibling.innerText}' will be removed.'`)) {
-        console.log('TODO: Send DELETE request to API')
+        const csrfToken = getCSRF();
+        fetch(`http://127.0.0.1:8000/tasks/api/list/${event.target.nextElementSibling.id.substring(4)}`, {
+                method: 'DELETE',
+                credentials: 'include',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                },
+            })
+        .then(response => console.log(response))
+        .catch((error) => {
+        console.error('Error:', error);
+        });
         list.removeChild(event.target.nextElementSibling);
         list.removeChild(event.target);
     }
 }
 
+/* const getCookie = (name) => {
+    if (!document.cookie) {
+      return null;
+    }
+    const xsrfCookies = document.cookie.split(';')
+      .map(c => c.trim())
+      .filter(c => c.startsWith(name + '='));
+    if (xsrfCookies.length === 0) {
+      return null;
+    }
+    return xsrfCookies[0].split('=')[1];
+  } */     //call with getCookie('csrftoken')
+
 const getCSRF = () => {
-    const CSRF_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-    return CSRF_token
+    const csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    return csrfToken
   }
 
-const createTask = (task) => {
+const createTask = async (task) => {
     const csrfToken = getCSRF();
-    console.log(csrfToken);
-    fetch('http://127.0.0.1:8000/tasks/api/list', {
+    response = await fetch('http://127.0.0.1:8000/tasks/api/list', {
             method: 'POST',
             credentials: 'include',
             headers: {
-                'Accept': 'application/json',
                 'Content-Type': 'application/json; charset=UTF-8',
-                "X-Requested-With": "XMLHttpRequest",
+                'X-CSRFToken': csrfToken,
+            },
+            body: JSON.stringify(task),
+        })
+    .then(response => response.json())
+    .catch((error) => {
+    console.error('Error:', error);
+    });
+    console.log(response);
+    return response
+}
+
+const updateTask = (task) => {
+    const csrfToken = getCSRF();
+    fetch(`http://127.0.0.1:8000/tasks/api/list/${task.id}`, {
+            method: 'PUT',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
                 'X-CSRFToken': csrfToken,
             },
             body: JSON.stringify(task),
@@ -95,10 +134,21 @@ const createTask = (task) => {
     });
 }
 
-const updateTask = (task) => {
-    console.log('TODO PUT request')
-    console.dir(task)
-}
+/* const getAllTasks = () => {
+    fetch('http://127.0.0.1:8000/tasks/api/list', {
+        method: 'GET',
+        credentials: 'include',
+    })
+    .then(response => response.json())
+    .then(result => {
+    console.log('Success:', result);
+    })
+    .catch((error) => {
+    console.error('Error:', error);
+    });
+} 
+
+window.addEventListener('load', getAllTasks); */
 
 input.addEventListener('keyup', (event) => {
     if (event.key === 'Enter') {
