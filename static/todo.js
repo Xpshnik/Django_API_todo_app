@@ -77,19 +77,6 @@ const deleteTask = (event) => {
     }
 }
 
-/* const getCookie = (name) => {
-    if (!document.cookie) {
-      return null;
-    }
-    const xsrfCookies = document.cookie.split(';')
-      .map(c => c.trim())
-      .filter(c => c.startsWith(name + '='));
-    if (xsrfCookies.length === 0) {
-      return null;
-    }
-    return xsrfCookies[0].split('=')[1];
-  } */     //call with getCookie('csrftoken')
-
 const getCSRF = () => {
     const csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
     return csrfToken
@@ -133,22 +120,6 @@ const updateTask = (task) => {
     console.error('Error:', error);
     });
 }
-
-/* const getAllTasks = () => {
-    fetch('http://127.0.0.1:8000/tasks/api/list', {
-        method: 'GET',
-        credentials: 'include',
-    })
-    .then(response => response.json())
-    .then(result => {
-    console.log('Success:', result);
-    })
-    .catch((error) => {
-    console.error('Error:', error);
-    });
-} 
-
-window.addEventListener('load', getAllTasks); */
 
 input.addEventListener('keyup', (event) => {
     if (event.key === 'Enter') {
